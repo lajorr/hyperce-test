@@ -39,68 +39,71 @@ class _ShoeCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.push('/shoe-details', extra: shoe),
       child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox.square(
-          dimension: 150.w,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20.r),
-            child: ColoredBox(
-              color: AppColors.neutral500.withValues(alpha: 0.05),
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 16.w,
-                    top: 16.h,
-                    child: SizedBox.square(
-                      dimension: 24.w,
-                      child: CachedNetworkImage(
-                        imageUrl: shoe.brandLogo,
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox.square(
+            dimension: 150.w,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.r),
+              child: ColoredBox(
+                color: AppColors.neutral500.withValues(alpha: 0.05),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      left: 16.w,
+                      top: 16.h,
+                      child: SizedBox.square(
+                        dimension: 24.w,
+                        child: CachedNetworkImage(
+                          imageUrl: shoe.brandLogo,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                        ),
                       ),
                     ),
-                  ),
 
-                  Positioned(
-                    left: 16.w,
-                    right: 16.w,
-                    bottom: 22.h,
-                    child: SizedBox(
-                      height: 85.h,
-                      width: 120.w,
-                      child: Icon(Icons.image),
+                    Positioned(
+                      left: 16.w,
+                      right: 16.w,
+                      bottom: 22.h,
+                      child: SizedBox(
+                        height: 85.h,
+                        width: 120.w,
+                        child: Icon(Icons.image),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(height: 10.h),
-        Text(
-          shoe.name,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.bodyText100,
-        ),
-        SizedBox(height: 4.h),
-        Row(
-          spacing: 5.w,
-          children: [
-            Icon(Icons.star_rounded, size: 12.w, color: AppColors.yellow500),
-            Text(
-              shoe.rating.toString(),
-              style: AppTextStyles.bodyText10.copyWith(
-                fontWeight: FontWeight.bold,
+          SizedBox(height: 10.h),
+          Text(
+            shoe.name,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.bodyText100,
+          ),
+          SizedBox(height: 4.h),
+          Row(
+            spacing: 5.w,
+            children: [
+              Icon(Icons.star_rounded, size: 12.w, color: AppColors.yellow500),
+              Text(
+                shoe.rating.toString(),
+                style: AppTextStyles.bodyText10.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            Text("(${shoe.reviews} Reviews)", style: AppTextStyles.bodyText10),
-          ],
-        ),
-        Text('\$${shoe.price}', style: AppTextStyles.heading300),
-      ],
-    ),
+              Text(
+                "(${shoe.reviews} Reviews)",
+                style: AppTextStyles.bodyText10,
+              ),
+            ],
+          ),
+          Text('\$${shoe.price}', style: AppTextStyles.heading300),
+        ],
+      ),
     );
   }
 }

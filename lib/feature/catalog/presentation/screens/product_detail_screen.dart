@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hyperce_test/config/services/service_locator.dart';
 import 'package:hyperce_test/core/constants/app_colors.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
+import 'package:hyperce_test/core/widgets/product_total_widget.dart';
 import 'package:hyperce_test/feature/catalog/domain/entity/shoe.dart';
-import 'package:hyperce_test/feature/catalog/presentation/cubit/cubit/shoe_variant_cubit.dart';
+import 'package:hyperce_test/feature/catalog/presentation/cubits/shoe_variant/shoe_variant_cubit.dart';
+import 'package:hyperce_test/feature/catalog/presentation/widgets/add_to_cart_dialog_content.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/image_carousel.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/size_selector.dart';
 
@@ -82,7 +84,35 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           },
         ),
       ),
-      bottomNavigationBar: _BottomBar(price: shoe.price, onAdd: () {}),
+      bottomNavigationBar: DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xffD7D7D7).withValues(alpha: 0.2),
+              blurRadius: 30,
+              offset: const Offset(0, -20),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 16.h),
+
+          child: ProductTotalWidget(
+            amount: shoe.price,
+            onBtnPress: () {
+              showModalBottomSheet(
+                context: context,
+                showDragHandle: true,
+                backgroundColor: Colors.white,
+                builder: (BuildContext context) {
+                  return AddToCartDialogContent(shoe: shoe);
+                },
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -98,64 +128,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           size: 12.w,
         );
       }),
-    );
-  }
-}
-
-class _BottomBar extends StatelessWidget {
-  const _BottomBar({required this.price, required this.onAdd});
-  final double price;
-  final VoidCallback onAdd;
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 16.h),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xffD7D7D7).withValues(alpha: 0.2),
-              blurRadius: 30,
-              offset: const Offset(0, -20),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              spacing: 5.h,
-              children: [
-                Text(
-                  'Price',
-                  style: AppTextStyles.bodyText100.copyWith(
-                    color: AppColors.neutral300,
-                  ),
-                ),
-                Text('\$$price', style: AppTextStyles.heading600),
-              ],
-            ),
-            FilledButton(
-              onPressed: onAdd,
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.neutral500,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100.r),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
-              ),
-              child: Text(
-                'Add to cart',
-                style: AppTextStyles.heading300.copyWith(color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

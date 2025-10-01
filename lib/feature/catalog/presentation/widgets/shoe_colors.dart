@@ -4,22 +4,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hyperce_test/core/constants/app_colors.dart';
 import 'package:hyperce_test/feature/catalog/presentation/cubits/shoe_variant/shoe_variant_cubit.dart';
 
-class ColorSelector extends StatefulWidget {
-  const ColorSelector({super.key, required this.colors});
+class ShoeColors extends StatefulWidget {
+  const ShoeColors({super.key, required this.colors});
 
   final List<String> colors;
 
   @override
-  State<ColorSelector> createState() => _ColorSelectorState();
+  State<ShoeColors> createState() => _ShoeColorsState();
 }
 
-class _ColorSelectorState extends State<ColorSelector> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<ShoeVariantCubit>().changeColor(widget.colors.first);
-  }
-
+class _ShoeColorsState extends State<ShoeColors> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
