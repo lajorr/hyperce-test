@@ -8,11 +8,12 @@ abstract class Shoe with _$Shoe {
   const factory Shoe({
     required String id,
     required String brand,
+    required String brandLogo,
     required String name,
     required List<String> images,
     required double rating,
     required int reviews,
-    required int price,
+    required double price,
     required List<double> sizes,
     required List<String> colors,
     required String description,

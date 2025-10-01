@@ -5,13 +5,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hyperce_test/core/usecases/usecase.dart';
 import 'package:hyperce_test/feature/catalog/domain/entity/shoe.dart';
 import 'package:hyperce_test/feature/catalog/domain/usecases/get_all_shoes_usecase.dart';
+import 'package:injectable/injectable.dart';
 
 part 'catalog_bloc.freezed.dart';
 part 'catalog_event.dart';
 part 'catalog_state.dart';
 
+@injectable
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
-  CatalogBloc({required this.getAllShoesUsecase}) : super(_Loading()) {
+  CatalogBloc({required this.getAllShoesUsecase}) : super(Loading()) {
     on<_LoadShoes>(_onLoadShoes);
   }
 
@@ -25,7 +27,10 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     final result = await getAllShoesUsecase.call(NoParams());
     result.fold(
       (failure) => emit(CatalogState.error(errorMessage: failure.message)),
-      (shoeList) => emit(CatalogState.success(data: shoeList)),
+      (shoeList) {
+        final brands = ["All", ...shoeList.map((shoe) => shoe.brand).toSet()];
+        emit(CatalogState.success(data: shoeList, brandList: brands));
+      },
     );
   }
 }

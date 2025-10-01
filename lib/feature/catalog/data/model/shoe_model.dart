@@ -9,11 +9,12 @@ abstract class ShoeModel with _$ShoeModel {
   const factory ShoeModel({
     required String id,
     required String brand,
+    required String brandLogo,
     required String name,
     required List<String> images,
     required double rating,
     required int reviews,
-    required int price,
+    required double price,
     required List<double> sizes,
     required List<String> colors,
     required String description,
@@ -32,6 +33,7 @@ abstract class ShoeModel with _$ShoeModel {
     sizes: entity.sizes,
     colors: entity.colors,
     description: entity.description,
+    brandLogo: entity.brandLogo,
   );
 }
 
@@ -47,5 +49,6 @@ extension ShoeModelX on ShoeModel {
     sizes: sizes,
     colors: colors,
     description: description,
+    brandLogo: '',
   );
 }

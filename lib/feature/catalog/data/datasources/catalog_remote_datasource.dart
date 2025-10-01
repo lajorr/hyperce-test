@@ -13,6 +13,7 @@ const _shoesData = [
   {
     "id": "1",
     "brand": "Nike",
+    "brandLogo": "https://example.com/logos/nike.png",
     "name": "Jordan 1 Retro High Tie Dye",
     "images": [
       "https://example.com/shoes/jordan-tie-dye-1.png",
@@ -30,6 +31,7 @@ const _shoesData = [
   {
     "id": "2",
     "brand": "Jordan",
+    "brandLogo": "https://example.com/logos/jordan.png",
     "name": "Jordan 1 Retro High OG Bred",
     "images": [
       "https://example.com/shoes/jordan-bred-1.png",
@@ -47,6 +49,7 @@ const _shoesData = [
   {
     "id": "3",
     "brand": "Adidas",
+    "brandLogo": "https://example.com/logos/adidas.png",
     "name": "Adidas Ultraboost 22",
     "images": [
       "https://example.com/shoes/adidas-ultraboost-1.png",
@@ -64,6 +67,7 @@ const _shoesData = [
   {
     "id": "4",
     "brand": "Adidas",
+    "brandLogo": "https://example.com/logos/adidas.png",
     "name": "Adidas ZX 2K Boost",
     "images": [
       "https://example.com/shoes/adidas-zx2k-1.png",
@@ -81,6 +85,7 @@ const _shoesData = [
   {
     "id": "5",
     "brand": "Vans",
+    "brandLogo": "https://example.com/logos/vans.png",
     "name": "Vans Sk8-Hi Retro",
     "images": [
       "https://example.com/shoes/vans-sk8hi-1.png",
@@ -98,6 +103,7 @@ const _shoesData = [
   {
     "id": "6",
     "brand": "Reebok",
+    "brandLogo": "https://example.com/logos/reebok.png",
     "name": "Reebok Zig Kinetica",
     "images": [
       "https://example.com/shoes/reebok-zig-1.png",
