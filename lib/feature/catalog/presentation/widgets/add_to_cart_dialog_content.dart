@@ -11,32 +11,22 @@ import 'package:hyperce_test/feature/catalog/domain/entity/shoe.dart';
 import 'package:hyperce_test/feature/catalog/presentation/cubits/quantity_selection/quantity_selection_cubit.dart';
 import 'package:hyperce_test/feature/catalog/presentation/cubits/shoe_variant/shoe_variant_cubit.dart';
 
-class AddToCartDialogContent extends StatefulWidget {
+class AddToCartDialogContent extends StatelessWidget {
   const AddToCartDialogContent({
     super.key,
     required this.shoe,
     required this.shoeVariantCubit,
+    required this.quantitySelectionCubit,
   });
 
   final Shoe shoe;
   final ShoeVariantCubit shoeVariantCubit;
-
-  @override
-  State<AddToCartDialogContent> createState() => _AddToCartDialogContentState();
-}
-
-class _AddToCartDialogContentState extends State<AddToCartDialogContent> {
-  late QuantitySelectionCubit _quantityCubit;
-  @override
-  void initState() {
-    super.initState();
-    _quantityCubit = QuantitySelectionCubit();
-  }
+  final QuantitySelectionCubit quantitySelectionCubit;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => _quantityCubit,
+    return BlocProvider.value(
+      value: quantitySelectionCubit,
       child: Builder(
         builder: (context) {
           final quantitySelectionState = context
@@ -80,10 +70,9 @@ class _AddToCartDialogContentState extends State<AddToCartDialogContent> {
                 ),
                 SizedBox(height: 30.h),
                 ProductTotalWidget(
-                  amount: quantitySelectionState.quantity * widget.shoe.price,
+                  amount: quantitySelectionState.quantity * shoe.price,
                   onBtnPress: () {
-                    final shoe = widget.shoe;
-                    final shoeVariantState = widget.shoeVariantCubit.state;
+                    final shoeVariantState = shoeVariantCubit.state;
 
                     final quantity = quantitySelectionState.quantity;
 

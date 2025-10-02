@@ -7,8 +7,8 @@ import 'package:hyperce_test/core/constants/app_colors.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
 import 'package:hyperce_test/core/widgets/custom_dialog_content.dart';
 import 'package:hyperce_test/core/widgets/product_total_widget.dart';
-import 'package:hyperce_test/feature/cart/presentation/cubit/cart_cubit.dart';
 import 'package:hyperce_test/feature/catalog/domain/entity/shoe.dart';
+import 'package:hyperce_test/feature/catalog/presentation/cubits/quantity_selection/quantity_selection_cubit.dart';
 import 'package:hyperce_test/feature/catalog/presentation/cubits/shoe_variant/shoe_variant_cubit.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/add_to_cart_dialog_content.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/image_carousel.dart';
@@ -27,10 +27,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     final Shoe shoe = widget.shoe;
     final intRating = shoe.rating.toInt();
-    final cartState = context.watch<CartCubit>().state;
 
-    return BlocProvider(
-      create: (context) => getIt<ShoeVariantCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => getIt<ShoeVariantCubit>()),
+        BlocProvider(create: (context) => getIt<QuantitySelectionCubit>()),
+      ],
       child: Builder(
         builder: (ctx) {
           return Scaffold(
@@ -60,7 +62,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                         ),
                         Text(
-                          '(${shoe.reviews} Reviews)',
+                          '(//${shoe.reviews} Reviews)',
                           style: AppTextStyles.bodyText100.copyWith(
                             color: AppColors.neutral300,
                           ),
@@ -110,6 +112,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         return AddToCartDialogContent(
                           shoe: shoe,
                           shoeVariantCubit: ctx.read<ShoeVariantCubit>(),
+                          quantitySelectionCubit: ctx
+                              .read<QuantitySelectionCubit>(),
                         );
                       },
                     );
@@ -117,13 +121,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       showModalBottomSheet(
                         context: ctx,
                         backgroundColor: Colors.white,
-
                         builder: (BuildContext context) {
                           return CustomDialogContent(
                             iconData: Icons.check_rounded,
                             title: "Added to cart",
                             subTitle:
-                                "${cartState.cartItems.length} Item(s) Total",
+                                "${ctx.read<QuantitySelectionCubit>().state.quantity} Item(s) Total",
                             negativeBtnText: "BACK EXPLORE",
                             positiveBtnText: "TO CART",
                             onNegativeBtnPress: () {

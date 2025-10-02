@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
 import 'package:hyperce_test/core/widgets/product_total_widget.dart';
 import 'package:hyperce_test/feature/cart/presentation/cubit/cart_cubit.dart';
@@ -42,7 +43,7 @@ class CartScreen extends StatelessWidget {
               ),
 
               Container(
-                padding: EdgeInsets.all(20.w),
+                padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.h),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
@@ -56,14 +57,10 @@ class CartScreen extends StatelessWidget {
                 child: SafeArea(
                   child: ProductTotalWidget(
                     amount: context.watch<CartCubit>().totalAmount,
-                    label: 'Total',
-                    buttonLabel: 'Checkout',
+                    label: 'Grand Total',
+                    buttonLabel: 'CHECK OUT',
                     onBtnPress: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Checkout functionality coming soon!'),
-                        ),
-                      );
+                      context.push('/order-summary');
                     },
                   ),
                 ),

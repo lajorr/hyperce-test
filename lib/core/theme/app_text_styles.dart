@@ -16,6 +16,13 @@ class AppTextStyles {
     height: 30 / 20,
     letterSpacing: 0.01 * 20,
   );
+  static TextStyle heading500 = TextStyle(
+    fontFamily: 'Urbanist',
+    fontWeight: FontWeight.w700,
+    fontSize: 18.sp,
+    height: 26 / 18,
+    letterSpacing: 18 * 0.01,
+  );
   static TextStyle heading400 = TextStyle(
     fontFamily: 'Urbanist',
     fontWeight: FontWeight.w600,

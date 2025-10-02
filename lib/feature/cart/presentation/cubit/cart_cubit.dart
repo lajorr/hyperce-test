@@ -52,6 +52,8 @@ class CartCubit extends Cubit<CartState> {
     emit(state.copyWith(cartItems: updated));
   }
 
+  void clearCart() => emit(state.copyWith(cartItems: []));
+
   double get totalAmount => state.cartItems.fold(
     0,
     (previousValue, cart) => previousValue + cart.price * cart.quantity,
