@@ -10,6 +10,7 @@ import 'package:hyperce_test/feature/catalog/presentation/cubits/shoe_variant/sh
 import 'package:hyperce_test/feature/catalog/presentation/widgets/add_to_cart_dialog_content.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/image_carousel.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/size_selector.dart';
+import 'package:hyperce_test/feature/catalog/presentation/widgets/success_dialog_content.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key, required this.shoe});
@@ -23,16 +24,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final Shoe shoe = widget.shoe;
+    final intRating = shoe.rating.toInt();
 
-    final intRating = widget.shoe.rating.toInt();
-
-    return Scaffold(
-      appBar: AppBar(),
-      body: BlocProvider(
-        create: (context) => getIt<ShoeVariantCubit>(),
-        child: Builder(
-          builder: (ctx) {
-            return SafeArea(
+    return BlocProvider(
+      create: (context) => getIt<ShoeVariantCubit>(),
+      child: Builder(
+        builder: (ctx) {
+          return Scaffold(
+            appBar: AppBar(),
+            body: SafeArea(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(horizontal: 30.w),
                 child: Column(
@@ -77,41 +77,55 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         color: AppColors.neutral400,
                       ),
                     ),
+                    SizedBox(height: 30.h),
                   ],
                 ),
               ),
-            );
-          },
-        ),
-      ),
-      bottomNavigationBar: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Color(0xffD7D7D7).withValues(alpha: 0.2),
-              blurRadius: 30,
-              offset: const Offset(0, -20),
             ),
-          ],
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 16.h),
+            bottomNavigationBar: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xffD7D7D7).withValues(alpha: 0.2),
+                    blurRadius: 30,
+                    offset: const Offset(0, -20),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 16.h),
 
-          child: ProductTotalWidget(
-            amount: shoe.price,
-            onBtnPress: () {
-              showModalBottomSheet(
-                context: context,
-                showDragHandle: true,
-                backgroundColor: Colors.white,
-                builder: (BuildContext context) {
-                  return AddToCartDialogContent(shoe: shoe);
-                },
-              );
-            },
-          ),
-        ),
+                child: ProductTotalWidget(
+                  amount: shoe.price,
+                  onBtnPress: () async {
+                    final String action = await showModalBottomSheet(
+                      context: ctx,
+                      showDragHandle: true,
+                      backgroundColor: Colors.white,
+                      builder: (BuildContext context) {
+                        return AddToCartDialogContent(
+                          shoe: shoe,
+                          shoeVariantCubit: ctx.read<ShoeVariantCubit>(),
+                        );
+                      },
+                    );
+                    if (action == "success" && ctx.mounted) {
+                      showModalBottomSheet(
+                        context: ctx,
+                        backgroundColor: Colors.white,
+
+                        builder: (BuildContext context) {
+                          return SuccessDialogContent();
+                        },
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

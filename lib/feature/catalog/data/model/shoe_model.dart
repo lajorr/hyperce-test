@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hyperce_test/core/utils/image_util.dart';
 import 'package:hyperce_test/feature/catalog/domain/entity/shoe.dart';
 
 part 'shoe_model.freezed.dart';
@@ -9,9 +10,7 @@ abstract class ShoeModel with _$ShoeModel {
   const factory ShoeModel({
     required String id,
     required String brand,
-    required String brandLogo,
     required String name,
-    required List<String> images,
     required double rating,
     required int reviews,
     required double price,
@@ -26,14 +25,12 @@ abstract class ShoeModel with _$ShoeModel {
     id: entity.id,
     brand: entity.brand,
     name: entity.name,
-    images: entity.images,
     rating: entity.rating,
     reviews: entity.reviews,
     price: entity.price,
     sizes: entity.sizes,
     colors: entity.colors,
     description: entity.description,
-    brandLogo: entity.brandLogo,
   );
 }
 
@@ -42,13 +39,13 @@ extension ShoeModelX on ShoeModel {
     id: id,
     brand: brand,
     name: name,
-    images: images,
+    images: ImageUtil.getImagesFromAsset(),
     rating: rating,
     reviews: reviews,
     price: price,
     sizes: sizes,
     colors: colors,
     description: description,
-    brandLogo: '',
+    brandLogo: ImageUtil.getBrandLogo(brand),
   );
 }

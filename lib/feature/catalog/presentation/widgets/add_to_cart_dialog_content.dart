@@ -4,13 +4,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
 import 'package:hyperce_test/core/widgets/product_total_widget.dart';
+import 'package:hyperce_test/feature/cart/domain/entity/cart_item.dart';
+import 'package:hyperce_test/feature/cart/presentation/cubit/cart_cubit.dart';
 import 'package:hyperce_test/feature/catalog/domain/entity/shoe.dart';
 import 'package:hyperce_test/feature/catalog/presentation/cubits/quantity_selection/quantity_selection_cubit.dart';
+import 'package:hyperce_test/feature/catalog/presentation/cubits/shoe_variant/shoe_variant_cubit.dart';
 
 class AddToCartDialogContent extends StatefulWidget {
-  const AddToCartDialogContent({super.key, required this.shoe});
+  const AddToCartDialogContent({
+    super.key,
+    required this.shoe,
+    required this.shoeVariantCubit,
+  });
 
   final Shoe shoe;
+  final ShoeVariantCubit shoeVariantCubit;
 
   @override
   State<AddToCartDialogContent> createState() => _AddToCartDialogContentState();
@@ -30,8 +38,10 @@ class _AddToCartDialogContentState extends State<AddToCartDialogContent> {
       create: (context) => _quantityCubit,
       child: Builder(
         builder: (context) {
-          final state = context.watch<QuantitySelectionCubit>().state;
-          final canDecrement = state.quantity > 1;
+          final quantitySelectionState = context
+              .watch<QuantitySelectionCubit>()
+              .state;
+          final canDecrement = quantitySelectionState.quantity > 1;
           return Padding(
             padding: EdgeInsets.fromLTRB(30.w, 16.h, 30.w, 20.h),
             child: Column(
@@ -54,7 +64,7 @@ class _AddToCartDialogContentState extends State<AddToCartDialogContent> {
                 SizedBox(height: 10.h),
                 TextField(
                   controller: TextEditingController(
-                    text: state.quantity.toString(),
+                    text: quantitySelectionState.quantity.toString(),
                   ),
 
                   readOnly: true,
@@ -92,8 +102,27 @@ class _AddToCartDialogContentState extends State<AddToCartDialogContent> {
                 ),
                 SizedBox(height: 30.h),
                 ProductTotalWidget(
-                  amount: state.quantity * widget.shoe.price,
-                  onBtnPress: () {},
+                  amount: quantitySelectionState.quantity * widget.shoe.price,
+                  onBtnPress: () {
+                    final shoe = widget.shoe;
+                    final shoeVariantState = widget.shoeVariantCubit.state;
+
+                    final quantity = quantitySelectionState.quantity;
+
+                    final cartItem = CartItem(
+                      id: shoe.id,
+                      itemName: shoe.name,
+                      image: shoe.images.first,
+                      brand: shoe.brand,
+                      price: shoe.price,
+                      quantity: quantity,
+                      color: shoeVariantState.selectedColor!,
+                      size: shoeVariantState.selectedSize!,
+                    );
+
+                    context.read<CartCubit>().addItemToCart(cartItem);
+                    context.pop("success");
+                  },
                 ),
               ],
             ),

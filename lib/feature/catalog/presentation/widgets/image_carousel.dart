@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hyperce_test/core/constants/app_colors.dart';
@@ -39,14 +38,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                   });
                 },
                 itemBuilder: (_, i) => Center(
-                  child: CachedNetworkImage(
-                    imageUrl: widget.images[i],
-                    fit: BoxFit.contain,
-                    placeholder: (context, url) =>
-                        const Center(child: CircularProgressIndicator()),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.image_not_supported_outlined),
-                  ),
+                  child: Image.asset(widget.images[i], fit: BoxFit.cover),
                 ),
               ),
               Positioned(

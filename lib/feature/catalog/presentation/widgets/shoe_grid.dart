@@ -1,6 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hyperce_test/core/constants/app_colors.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
@@ -54,10 +56,12 @@ class _ShoeCard extends StatelessWidget {
                       top: 16.h,
                       child: SizedBox.square(
                         dimension: 24.w,
-                        child: CachedNetworkImage(
-                          imageUrl: shoe.brandLogo,
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
+                        child: SvgPicture.asset(
+                          shoe.brandLogo,
+                          errorBuilder: (context, error, stackTrace) {
+                            log(error.toString());
+                            return const Icon(Icons.image);
+                          },
                         ),
                       ),
                     ),
@@ -66,10 +70,12 @@ class _ShoeCard extends StatelessWidget {
                       left: 16.w,
                       right: 16.w,
                       bottom: 22.h,
-                      child: SizedBox(
-                        height: 85.h,
-                        width: 120.w,
-                        child: Icon(Icons.image),
+                      child: Image.asset(
+                        'assets/images/shoe.png',
+                        errorBuilder: (context, error, stackTrace) {
+                          log(error.toString());
+                          return const Icon(Icons.image);
+                        },
                       ),
                     ),
                   ],
