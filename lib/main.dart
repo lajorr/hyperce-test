@@ -6,8 +6,11 @@ import 'package:hyperce_test/config/services/service_locator.dart';
 import 'package:hyperce_test/core/constants/app_colors.dart';
 import 'package:hyperce_test/feature/cart/presentation/cubit/cart_cubit.dart';
 
-void main() {
-  configureDependencies();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await configureDependencies();
+
   runApp(const MainApp());
 }
 
