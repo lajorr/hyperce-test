@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hyperce_test/core/constants/app_colors.dart';
+import 'package:hyperce_test/core/widgets/custom_rounded_square_container.dart';
+import 'package:hyperce_test/feature/catalog/domain/entity/shoe.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/color_selector.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/page_indicator.dart';
 
@@ -11,7 +12,7 @@ class ImageCarousel extends StatefulWidget {
     required this.colorVariants,
   });
   final List<String> images;
-  final List<String> colorVariants;
+  final List<ItemColor> colorVariants;
 
   @override
   State<ImageCarousel> createState() => _ImageCarouselState();
@@ -22,41 +23,34 @@ class _ImageCarouselState extends State<ImageCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.square(
+    return CustomRoundedSquareContainer(
       dimension: 315.w,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.r),
-        child: ColoredBox(
-          color: AppColors.neutral500.withValues(alpha: 0.04),
-          child: Stack(
-            children: [
-              PageView.builder(
-                itemCount: widget.images.length,
-                onPageChanged: (idx) {
-                  setState(() {
-                    index = idx;
-                  });
-                },
-                itemBuilder: (_, i) => Center(
-                  child: Image.asset(widget.images[i], fit: BoxFit.cover),
-                ),
-              ),
-              Positioned(
-                left: 20,
-                bottom: 26,
-                child: PageIndicator(
-                  imageCount: widget.images.length,
-                  currentIndex: index,
-                ),
-              ),
-              Positioned(
-                right: 10,
-                bottom: 10,
-                child: ColorSelector(colors: widget.colorVariants),
-              ),
-            ],
+      child: Stack(
+        children: [
+          PageView.builder(
+            itemCount: widget.images.length,
+            onPageChanged: (idx) {
+              setState(() {
+                index = idx;
+              });
+            },
+            itemBuilder: (_, i) =>
+                Center(child: Image.asset(widget.images[i], fit: BoxFit.cover)),
           ),
-        ),
+          Positioned(
+            left: 20,
+            bottom: 26,
+            child: PageIndicator(
+              imageCount: widget.images.length,
+              currentIndex: index,
+            ),
+          ),
+          Positioned(
+            right: 10,
+            bottom: 10,
+            child: ColorSelector(colors: widget.colorVariants),
+          ),
+        ],
       ),
     );
   }

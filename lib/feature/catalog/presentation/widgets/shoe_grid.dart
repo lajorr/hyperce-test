@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hyperce_test/core/constants/app_colors.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
+import 'package:hyperce_test/core/widgets/custom_rounded_square_container.dart';
 import 'package:hyperce_test/feature/catalog/domain/entity/shoe.dart';
 
 class ShoeGrid extends StatelessWidget {
@@ -43,44 +44,38 @@ class _ShoeCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox.square(
+          CustomRoundedSquareContainer(
             dimension: 150.w,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.r),
-              child: ColoredBox(
-                color: AppColors.neutral500.withValues(alpha: 0.05),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 16.w,
-                      top: 16.h,
-                      child: SizedBox.square(
-                        dimension: 24.w,
-                        child: SvgPicture.asset(
-                          shoe.brandLogo,
-                          errorBuilder: (context, error, stackTrace) {
-                            log(error.toString());
-                            return const Icon(Icons.image);
-                          },
-                        ),
-                      ),
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 16.w,
+                  top: 16.h,
+                  child: SizedBox.square(
+                    dimension: 24.w,
+                    child: SvgPicture.asset(
+                      shoe.brandLogo,
+                      errorBuilder: (context, error, stackTrace) {
+                        log(error.toString());
+                        return const Icon(Icons.image);
+                      },
                     ),
-
-                    Positioned(
-                      left: 16.w,
-                      right: 16.w,
-                      bottom: 22.h,
-                      child: Image.asset(
-                        'assets/images/shoe.png',
-                        errorBuilder: (context, error, stackTrace) {
-                          log(error.toString());
-                          return const Icon(Icons.image);
-                        },
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+
+                Positioned(
+                  left: 16.w,
+                  right: 16.w,
+                  bottom: 22.h,
+                  child: Image.asset(
+                    'assets/images/shoe.png',
+                    errorBuilder: (context, error, stackTrace) {
+                      log(error.toString());
+                      return const Icon(Icons.image);
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
           SizedBox(height: 10.h),

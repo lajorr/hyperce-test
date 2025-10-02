@@ -51,4 +51,13 @@ class CartCubit extends Cubit<CartState> {
     }).toList();
     emit(state.copyWith(cartItems: updated));
   }
+
+  double get totalAmount => state.cartItems.fold(
+    0,
+    (previousValue, cart) => previousValue + cart.price * cart.quantity,
+  );
+
+  double calculateProductTotal(CartItem item) {
+    return item.quantity * item.price;
+  }
 }

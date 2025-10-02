@@ -15,23 +15,21 @@ abstract class ShoeModel with _$ShoeModel {
     required int reviews,
     required double price,
     required List<double> sizes,
-    required List<String> colors,
+    required List<ItemColorModel> colors,
     required String description,
   }) = _ShoeModel;
 
   factory ShoeModel.fromJson(Map<String, dynamic> json) =>
       _$ShoeModelFromJson(json);
-  factory ShoeModel.fromEntity(Shoe entity) => ShoeModel(
-    id: entity.id,
-    brand: entity.brand,
-    name: entity.name,
-    rating: entity.rating,
-    reviews: entity.reviews,
-    price: entity.price,
-    sizes: entity.sizes,
-    colors: entity.colors,
-    description: entity.description,
-  );
+}
+
+@freezed
+abstract class ItemColorModel with _$ItemColorModel {
+  factory ItemColorModel({required String hex, required String name}) =
+      _ItemColorModel;
+
+  factory ItemColorModel.fromJson(Map<String, dynamic> json) =>
+      _$ItemColorModelFromJson(json);
 }
 
 extension ShoeModelX on ShoeModel {
@@ -44,8 +42,12 @@ extension ShoeModelX on ShoeModel {
     reviews: reviews,
     price: price,
     sizes: sizes,
-    colors: colors,
+    colors: colors.map((c) => c.toEntity()).toList(),
     description: description,
     brandLogo: ImageUtil.getBrandLogo(brand),
   );
+}
+
+extension ItemColorModelX on ItemColorModel {
+  ItemColor toEntity() => ItemColor(hex: hex, name: name);
 }

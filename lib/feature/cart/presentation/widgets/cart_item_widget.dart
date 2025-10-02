@@ -1,218 +1,133 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hyperce_test/core/constants/app_assets.dart';
 import 'package:hyperce_test/core/constants/app_colors.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
+import 'package:hyperce_test/core/widgets/custom_dialog_content.dart';
+import 'package:hyperce_test/core/widgets/custom_rounded_square_container.dart';
+import 'package:hyperce_test/core/widgets/quantity_counter_widget.dart';
 import 'package:hyperce_test/feature/cart/domain/entity/cart_item.dart';
+import 'package:hyperce_test/feature/cart/presentation/cubit/cart_cubit.dart';
+import 'package:swipeable_tile/swipeable_tile.dart';
 
 class CartItemWidget extends StatelessWidget {
-  const CartItemWidget({
-    super.key,
-    required this.cartItem,
-    required this.onIncrement,
-    required this.onDecrement,
-    required this.onRemove,
-  });
+  const CartItemWidget({super.key, required this.cartItem});
 
   final CartItem cartItem;
-  final VoidCallback onIncrement;
-  final VoidCallback onDecrement;
-  final VoidCallback onRemove;
 
   @override
   Widget build(BuildContext context) {
-    final colorObj = Color(
-      int.parse('0xff${cartItem.color.substring(1)}'),
-    );
-
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppColors.black100,
-        borderRadius: BorderRadius.circular(20.r),
-      ),
-      child: Row(
-        children: [
-          // Product Image
-          Container(
-            width: 80.w,
-            height: 80.w,
+    return SwipeableTile.swipeToTrigger(
+      key: Key(cartItem.id),
+      color: Colors.white,
+      direction: SwipeDirection.endToStart,
+      swipeThreshold: 0.25,
+      isElevated: false,
+      backgroundBuilder: (_, _, _) => Align(
+        alignment: Alignment.centerRight,
+        child: SizedBox(
+          height: 88.h,
+          width: 80.w,
+          child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.r),
-              color: Colors.white,
+              color: AppColors.error500,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.r),
+                bottomLeft: Radius.circular(20.r),
+              ),
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16.r),
-              child: CachedNetworkImage(
-                imageUrl: cartItem.image,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  color: AppColors.neutral200,
-                  child: Icon(
+            child: Center(child: SvgPicture.asset(AppAssets.trashIcon)),
+          ),
+        ),
+      ),
+      onSwiped: (direction) {
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.white,
+          builder: (BuildContext context) {
+            return CustomDialogContent(
+              iconData: Icons.close_rounded,
+              title: "Remote Item?",
+              subTitle: "Total quantity ${cartItem.quantity}",
+              negativeBtnText: "CANCEL",
+              positiveBtnText: "REMOVE",
+              onNegativeBtnPress: () {
+                context.pop();
+              },
+              onPositiveBtnPress: () {
+                context.read<CartCubit>().removeFromCart(cartItem);
+                context.pop();
+              },
+            );
+          },
+        );
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 30.w),
+        child: Row(
+          children: [
+            CustomRoundedSquareContainer(
+              dimension: 88.w,
+              child: Center(
+                child: Image.asset(
+                  cartItem.image,
+                  height: 50.h,
+                  width: 70.w,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) => Icon(
                     Icons.image,
-                    color: AppColors.neutral300,
-                    size: 24.w,
-                  ),
-                ),
-                errorWidget: (context, url, error) => Container(
-                  color: AppColors.neutral200,
-                  child: Icon(
-                    Icons.image_not_supported,
                     color: AppColors.neutral300,
                     size: 24.w,
                   ),
                 ),
               ),
             ),
-          ),
-          SizedBox(width: 16.w),
-          // Product Details
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Product Name and Remove Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            cartItem.itemName,
-                            style: AppTextStyles.heading400.copyWith(
-                              color: AppColors.neutral500,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(height: 4.h),
-                          Text(
-                            cartItem.brand,
-                            style: AppTextStyles.bodyText100.copyWith(
-                              color: AppColors.neutral400,
-                            ),
-                          ),
-                        ],
+            SizedBox(width: 16.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    cartItem.itemName,
+                    style: AppTextStyles.heading400,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    "${cartItem.brand} . ${cartItem.color.name} . ${cartItem.size}",
+                    style: AppTextStyles.bodyText100.copyWith(
+                      color: AppColors.neutral400,
+                    ),
+                  ),
+                  SizedBox(height: 10.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '\$${context.read<CartCubit>().calculateProductTotal(cartItem).toStringAsFixed(2)}',
+                        style: AppTextStyles.heading400.copyWith(
+                          color: AppColors.neutral500,
+                        ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: onRemove,
-                      child: Icon(
-                        Icons.close,
-                        size: 20.w,
-                        color: AppColors.neutral400,
+                      QuantityCounterWidget(
+                        quantity: cartItem.quantity,
+                        showQuantity: true,
+                        onDecrement: () =>
+                            context.read<CartCubit>().decrement(cartItem),
+                        onIncrement: () =>
+                            context.read<CartCubit>().increment(cartItem),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 12.h),
-                // Size and Color
-                Row(
-                  children: [
-                    Text(
-                      'Size: ${cartItem.size}',
-                      style: AppTextStyles.bodyText100.copyWith(
-                        color: AppColors.neutral400,
-                      ),
-                    ),
-                    SizedBox(width: 16.w),
-                    Row(
-                      children: [
-                        Text(
-                          'Color: ',
-                          style: AppTextStyles.bodyText100.copyWith(
-                            color: AppColors.neutral400,
-                          ),
-                        ),
-                        Container(
-                          width: 14.w,
-                          height: 14.w,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: colorObj,
-                            border: colorObj == Colors.white
-                                ? Border.all(
-                                    color: AppColors.neutral200,
-                                    width: 1,
-                                  )
-                                : null,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16.h),
-                // Price and Quantity Controls
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '\$${cartItem.price.toStringAsFixed(2)}',
-                      style: AppTextStyles.heading400.copyWith(
-                        color: AppColors.neutral500,
-                      ),
-                    ),
-                    // Quantity Controls
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: cartItem.quantity > 1 ? onDecrement : null,
-                          child: Container(
-                            width: 32.w,
-                            height: 32.w,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: cartItem.quantity > 1
-                                  ? AppColors.neutral500
-                                  : AppColors.neutral200,
-                            ),
-                            child: Icon(
-                              Icons.remove,
-                              size: 16.w,
-                              color: cartItem.quantity > 1
-                                  ? Colors.white
-                                  : AppColors.neutral400,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 40.w,
-                          alignment: Alignment.center,
-                          child: Text(
-                            cartItem.quantity.toString(),
-                            style: AppTextStyles.heading300.copyWith(
-                              color: AppColors.neutral500,
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: onIncrement,
-                          child: Container(
-                            width: 32.w,
-                            height: 32.w,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.neutral500,
-                            ),
-                            child: Icon(
-                              Icons.add,
-                              size: 16.w,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

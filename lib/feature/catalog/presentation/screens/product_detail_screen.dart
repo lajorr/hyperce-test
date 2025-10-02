@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hyperce_test/config/services/service_locator.dart';
 import 'package:hyperce_test/core/constants/app_colors.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
+import 'package:hyperce_test/core/widgets/custom_dialog_content.dart';
 import 'package:hyperce_test/core/widgets/product_total_widget.dart';
+import 'package:hyperce_test/feature/cart/presentation/cubit/cart_cubit.dart';
 import 'package:hyperce_test/feature/catalog/domain/entity/shoe.dart';
 import 'package:hyperce_test/feature/catalog/presentation/cubits/shoe_variant/shoe_variant_cubit.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/add_to_cart_dialog_content.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/image_carousel.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/size_selector.dart';
-import 'package:hyperce_test/feature/catalog/presentation/widgets/success_dialog_content.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key, required this.shoe});
@@ -25,6 +27,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     final Shoe shoe = widget.shoe;
     final intRating = shoe.rating.toInt();
+    final cartState = context.watch<CartCubit>().state;
 
     return BlocProvider(
       create: (context) => getIt<ShoeVariantCubit>(),
@@ -116,7 +119,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         backgroundColor: Colors.white,
 
                         builder: (BuildContext context) {
-                          return SuccessDialogContent();
+                          return CustomDialogContent(
+                            iconData: Icons.check_rounded,
+                            title: "Added to cart",
+                            subTitle:
+                                "${cartState.cartItems.length} Item(s) Total",
+                            negativeBtnText: "BACK EXPLORE",
+                            positiveBtnText: "TO CART",
+                            onNegativeBtnPress: () {
+                              context.go('/');
+                            },
+                            onPositiveBtnPress: () {
+                              context.go('/');
+                              context.push('/cart');
+                            },
+                          );
                         },
                       );
                     }

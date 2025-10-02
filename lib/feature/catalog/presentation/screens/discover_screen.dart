@@ -6,7 +6,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hyperce_test/config/services/service_locator.dart';
 import 'package:hyperce_test/core/constants/app_assets.dart';
+import 'package:hyperce_test/core/constants/app_colors.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
+import 'package:hyperce_test/feature/cart/presentation/cubit/cart_cubit.dart';
 import 'package:hyperce_test/feature/catalog/presentation/bloc/catalog_bloc.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/category_chips.dart';
 import 'package:hyperce_test/feature/catalog/presentation/widgets/shoe_grid.dart';
@@ -50,7 +52,32 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       onTap: () {
                         context.push('/cart');
                       },
-                      child: SvgPicture.asset(AppAssets.bagIcon),
+                      child: Badge(
+                        backgroundColor: Colors.transparent,
+                        offset: Offset(4, -1),
+                        isLabelVisible: context
+                            .watch<CartCubit>()
+                            .state
+                            .cartItems
+                            .isNotEmpty,
+                        padding: EdgeInsets.zero,
+                        label: SizedBox.square(
+                          dimension: 8.w,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: AppColors.error500,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                        child: SizedBox.square(
+                          dimension: 24.w,
+                          child: SvgPicture.asset(
+                            AppAssets.bagIcon,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

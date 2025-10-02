@@ -15,9 +15,17 @@ abstract class Shoe with _$Shoe {
     required int reviews,
     required double price,
     required List<double> sizes,
-    required List<String> colors,
+    required List<ItemColor> colors,
     required String description,
   }) = _Shoe;
 
   factory Shoe.fromJson(Map<String, dynamic> json) => _$ShoeFromJson(json);
+}
+
+@freezed
+abstract class ItemColor with _$ItemColor {
+  factory ItemColor({required String hex, required String name}) = _ItemColor;
+
+  factory ItemColor.fromJson(Map<String, dynamic> json) =>
+      _$ItemColorFromJson(json);
 }

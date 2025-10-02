@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
 import 'package:hyperce_test/core/widgets/product_total_widget.dart';
+import 'package:hyperce_test/core/widgets/quantity_counter_widget.dart';
 import 'package:hyperce_test/feature/cart/domain/entity/cart_item.dart';
 import 'package:hyperce_test/feature/cart/presentation/cubit/cart_cubit.dart';
 import 'package:hyperce_test/feature/catalog/domain/entity/shoe.dart';
@@ -41,7 +42,6 @@ class _AddToCartDialogContentState extends State<AddToCartDialogContent> {
           final quantitySelectionState = context
               .watch<QuantitySelectionCubit>()
               .state;
-          final canDecrement = quantitySelectionState.quantity > 1;
           return Padding(
             padding: EdgeInsets.fromLTRB(30.w, 16.h, 30.w, 20.h),
             child: Column(
@@ -69,34 +69,12 @@ class _AddToCartDialogContentState extends State<AddToCartDialogContent> {
 
                   readOnly: true,
                   decoration: InputDecoration(
-                    suffix: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          style: IconButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            overlayColor: Colors.transparent,
-                          ),
-                          onPressed: canDecrement
-                              ? () {
-                                  context
-                                      .read<QuantitySelectionCubit>()
-                                      .decrement();
-                                }
-                              : null,
-                          icon: Icon(Icons.remove_circle_outline),
-                        ),
-                        IconButton(
-                          style: IconButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            overlayColor: Colors.transparent,
-                          ),
-                          onPressed: () {
-                            context.read<QuantitySelectionCubit>().increment();
-                          },
-                          icon: Icon(Icons.add_circle_outline),
-                        ),
-                      ],
+                    suffix: QuantityCounterWidget(
+                      quantity: quantitySelectionState.quantity,
+                      onDecrement: () =>
+                          context.read<QuantitySelectionCubit>().decrement(),
+                      onIncrement: () =>
+                          context.read<QuantitySelectionCubit>().increment(),
                     ),
                   ),
                 ),

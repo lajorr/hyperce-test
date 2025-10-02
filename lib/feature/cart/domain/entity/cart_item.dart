@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hyperce_test/feature/catalog/domain/entity/shoe.dart';
 
 part 'cart_item.freezed.dart';
 part 'cart_item.g.dart';
@@ -12,7 +13,7 @@ abstract class CartItem with _$CartItem {
     required String brand,
     required double price,
     required int quantity,
-    required String color,
+    required ItemColor color,
     required double size,
   }) = _CartItem;
 
