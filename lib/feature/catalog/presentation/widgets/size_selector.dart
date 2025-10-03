@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hyperce_test/core/constants/app_colors.dart';
+import 'package:hyperce_test/core/extensions/double_ext.dart';
 import 'package:hyperce_test/feature/catalog/presentation/cubits/shoe_variant/shoe_variant_cubit.dart';
 
 import '../../../../core/theme/app_text_styles.dart';
@@ -42,7 +43,7 @@ class _SizeSelectorState extends State<SizeSelector> {
               ),
               child: Center(
                 child: Text(
-                  size.toString(),
+                  size.toFormattedString(),
                   style: AppTextStyles.heading300.copyWith(
                     color: isSelected ? Colors.white : AppColors.neutral400,
                   ),

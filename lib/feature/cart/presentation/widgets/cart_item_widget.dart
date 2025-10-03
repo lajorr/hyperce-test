@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hyperce_test/core/constants/app_assets.dart';
 import 'package:hyperce_test/core/constants/app_colors.dart';
+import 'package:hyperce_test/core/extensions/double_ext.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
 import 'package:hyperce_test/core/widgets/custom_dialog_content.dart';
 import 'package:hyperce_test/core/widgets/custom_rounded_square_container.dart';
@@ -50,7 +51,7 @@ class CartItemWidget extends StatelessWidget {
           builder: (BuildContext context) {
             return CustomDialogContent(
               iconData: Icons.close_rounded,
-              title: "Remote Item?",
+              title: "Remove Item?",
               subTitle: "Total quantity ${cartItem.quantity}",
               negativeBtnText: "CANCEL",
               positiveBtnText: "REMOVE",
@@ -98,7 +99,7 @@ class CartItemWidget extends StatelessWidget {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    "${cartItem.brand} . ${cartItem.color.name} . ${cartItem.size}",
+                    "${cartItem.brand} . ${cartItem.color.name} . ${cartItem.size.toFormattedString()}",
                     style: AppTextStyles.bodyText100.copyWith(
                       color: AppColors.neutral400,
                     ),

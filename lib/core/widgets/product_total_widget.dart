@@ -32,7 +32,10 @@ class ProductTotalWidget extends StatelessWidget {
                 color: AppColors.neutral300,
               ),
             ),
-            Text('\$$amount', style: AppTextStyles.heading600),
+            Text(
+              '\$${amount.toStringAsFixed(2)}',
+              style: AppTextStyles.heading600,
+            ),
           ],
         ),
         FilledButton(
