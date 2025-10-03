@@ -126,15 +126,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             iconData: Icons.check_rounded,
                             title: "Added to cart",
                             subTitle:
-                                "${ctx.read<QuantitySelectionCubit>().state.quantity} Item(s) Total",
+                                "1 Item Total",
                             negativeBtnText: "BACK EXPLORE",
                             positiveBtnText: "TO CART",
                             onNegativeBtnPress: () {
-                              context.go('/');
+                              ctx.go('/');
                             },
                             onPositiveBtnPress: () {
-                              context.go('/');
-                              context.push('/cart');
+                              ctx.go('/');
+                              ctx.push('/cart');
                             },
                           );
                         },

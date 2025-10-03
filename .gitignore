@@ -48,3 +48,7 @@ app.*.map.json
 **/*.g.dart
 **/*.freezed.dart
 **/*.config.dart
+
+# firebase
+lib/firebase_options.dart
+google-services.json
