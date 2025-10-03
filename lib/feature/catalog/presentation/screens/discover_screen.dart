@@ -10,8 +10,7 @@ import 'package:hyperce_test/core/constants/app_colors.dart';
 import 'package:hyperce_test/core/theme/app_text_styles.dart';
 import 'package:hyperce_test/feature/cart/presentation/cubit/cart_cubit.dart';
 import 'package:hyperce_test/feature/catalog/presentation/bloc/catalog_bloc.dart';
-import 'package:hyperce_test/feature/catalog/presentation/widgets/category_chips.dart';
-import 'package:hyperce_test/feature/catalog/presentation/widgets/shoe_grid.dart';
+import 'package:hyperce_test/feature/catalog/presentation/widgets/catalog_success_widget.dart';
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -95,15 +94,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                           child: Text(msg ?? "Something went wrong."),
                         ),
                       ),
-                      success: (data, brands) => Column(
-                        children: [
-                          SizedBox(height: 24.h),
-                          CategoryChips(brands: brands),
-                          SizedBox(height: 30.h),
-                          ShoeGrid(shoeList: data),
-                          SizedBox(height: 24.h),
-                        ],
-                      ),
+                      success: (data, brands) =>
+                          CatalogSuccessWidget(data: data, brands: brands),
                     );
                   },
                 ),
