@@ -125,8 +125,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           return CustomDialogContent(
                             iconData: Icons.check_rounded,
                             title: "Added to cart",
-                            subTitle:
-                                "1 Item Total",
+                            subTitle: "1 Item Total",
                             negativeBtnText: "BACK EXPLORE",
                             positiveBtnText: "TO CART",
                             onNegativeBtnPress: () {
